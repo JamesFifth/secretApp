@@ -1,0 +1,82 @@
+<%- include('partials/user-header-log') %>
+  <div class="jumbotron jumbotron-fluid" id="myprofile">
+    <h1 class="display-4">Profile</h1>
+    
+    <div id="infos">
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Account</a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+            aria-selected="false">Secrets</a>
+        </li>
+      </ul>
+      <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+          <div id="my-info">
+            <!-- id -->
+            <h3 class="display-5">User Id</h3>
+            <h4><%= user.id %></h4>
+            <hr>
+            <!-- account -->
+            <h3 class="display-5">Account name</h3>
+            <h4><%= user.account %></h4>
+            <hr>
+            <!-- email -->
+            <h3 class="display-5">Email</h3>
+            <h4><%= user.username %></h4>
+            <hr>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+          <div class="row">
+            <% user.secret.forEach(function(sct){ %>
+              <div class="col-lg-4" id="card-img">
+                <div class="card text-center text-white">
+                  <img src="uploads/<%= sct.picture %> " class="card-img">
+                  <div class="card-img-overlay">
+                    <h2 class="card-text align-middle w-100 h-100" id="img-words">
+                      <%=sct.singleSecret%>
+                    </h2>
+                    <div class="row" id="operate-btns">
+                      <div class="col-lg-4">
+                        <!-- delete this post -->
+                        <form action="/delete" method="post">
+                          <input type="hidden" name="postID" value="<%=sct.id%>"></input>
+                          <button type="submit" style="text-decoration: none; color: red" class="btn btn-sm btn-link far fa-trash-alt">delete</button>
+                        </form>
+                        <!-- end of delete -->
+                      </div>
+                      <div class="col-lg-4">
+                        <!-- update this post -->
+                        <form action="/modify" method="POST">
+                          <input type="hidden" name="postContent" value="<%=sct.singleSecret%>"></input>
+                          <input type="hidden" name="postID" value="<%=sct.id%>"></input>
+                          <input type="hidden" name="picture" value="<%=sct.picture%>"></input>
+                          <button type="submit" style="text-decoration: none; color: rgb(128, 146, 27)" class="btn btn-sm btn-link fas fa-edit">modify</button>
+                        </form>
+                        <!-- end of delete -->
+                      </div>
+                      <div class="col-lg-4">
+                        <!-- update this post -->
+                        <form action="/comment" method="POST">
+                          <input type="hidden" name="postContent" value="<%=sct.singleSecret%>"></input>
+                          <input type="hidden" name="postID" value="<%=sct.id%>"></input>
+                          <input type="hidden" name="userID" value="<%=user.id%>"></input>
+                          <input type="hidden" name="picture" value="<%=sct.picture%>"></input>
+                          <button type="submit" style="text-decoration: none; color: rgb(57, 156, 236)" class="btn btn-sm btn-link far fa-comment">comments</button>
+                        </form>
+                        <!-- end of delete -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <% }); %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%- include('partials/user-footer') %>

@@ -1,0 +1,50 @@
+<%- include('partials/user-header-log') %>
+  <div class="container" id="block01">
+    <div class="jumbotron centered">
+      <h1 class="display-4">Write your comment here</h1><br>
+      <div class="row">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-6" id="card-img">
+          <div class="card text-center text-white">
+            <img src="uploads/<%=postPicture%>" class="card-img">
+            <div class="card-img-overlay">
+              <h2 class="card-text align-middle w-100 h-100" id="img-words">
+                <%=sct%>
+              </h2>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3"></div>
+      </div>
+      <form action="/addComment" method="POST">
+        <div class="form-group">
+          <input type="hidden" name="userID" value="<%=userID%>"></input>
+          <input type="hidden" name="postID" value="<%=postID%>"></input>
+          <input type="hidden" name="postPicture" value="<%=postPicture%>"></input>
+          <input type="hidden" name="sct" value="<%=sct%>"></input>
+          <textarea type="text" class="form-control text-center" name="comment"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm">Post comment</button>
+    </div>
+    </form>
+    
+    <div id="all-comments">
+      <div class="card">
+        <div class="card-body">
+          <% currentCmts.forEach(cmt=> { %>
+            <blockquote class="blockquote mb-0">
+              <p>
+                <%=cmt.signleComment %>
+              </p>
+              <footer class="blockquote-footer">
+                <%=cmt.commenter %>  at <%= cmt.commentTime %>
+              </footer>
+            </blockquote>
+            <hr>
+          <% }); %>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <%- include('partials/user-footer') %>

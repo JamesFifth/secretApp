@@ -1,0 +1,16 @@
+<%- include('partials/user-header-log') %>
+
+<div class="container" id="block01">
+  <div class="jumbotron centered">
+    <h1 class="display-4">Modify your secret</h1><br>
+    <form action="/update" method="POST">
+      <div class="form-group">
+        <input type="hidden" name="postID" value="<%=postID%>"></input>
+        <input type="hidden" name="postPicture" value="<%=postPicture%>"></input>
+        <input type="text" class="form-control text-center" name="newSecret" value="<%=postContent%>">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Submit</button>
+    </form>
+  </div>
+</div>
+<%- include('partials/user-footer') %>
