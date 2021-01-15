@@ -101,7 +101,7 @@ passport.deserializeUser(function (id, done) {
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './public/uploads/')
+    cb(null, './assets/images/')
   },
   filename: function (req, file, cb) {
     cb(null, file.fieldname + '-' + Date.now() + '.jpg')
