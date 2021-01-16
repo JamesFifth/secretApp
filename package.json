@@ -13,6 +13,7 @@
     "node": "14.15.4"
   },
   "dependencies": {
+    "aws-sdk": "^2.828.0",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
@@ -24,6 +25,7 @@
     "mongoose-encryption": "^2.0.3",
     "mongoose-findorcreate": "^3.0.0",
     "multer": "^1.4.2",
+    "multer-s3": "^2.9.0",
     "passport": "^0.4.1",
     "passport-facebook": "^3.0.0",
     "passport-google-oauth20": "^2.0.0",

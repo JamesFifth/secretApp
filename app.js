@@ -6,9 +6,12 @@ const mongoose = require("mongoose");
 const session = require('express-session');
 const passport = require('passport');
 const passportLocalMongoose = require('passport-local-mongoose');
-// const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const findOrCreate = require('mongoose-findorcreate');
+
+// for upload photos to AWS S3
 const multer = require('multer');
+const aws = require('aws-sdk');
+const multerS3 = require('multer-s3');
 
 const app = express();
 
@@ -76,39 +79,26 @@ passport.deserializeUser(function (id, done) {
   });
 });
 
-// passport.use(new GoogleStrategy({
-//   clientID: process.env.GOOGLE_CLIENT_ID,
-//   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-//   callbackURL: "http://localhost:3000/auth/google/secrets"
-// },
-//   function (accessToken, refreshToken, profile, cb) {
-//     User.findOrCreate({ googleId: profile.id }, function (err, user) {
-//       return cb(err, user);
-//     });
-//   }
-// ));
+// -------------------------------- multer-s3 upload file to AWS S3------------------------------
+aws.config.update({
+    secretAccessKey: process.env.AWS_SECRET_ACESS_KEY,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    region: 'us-east-1'
+});
 
-// app.get('/auth/google',
-//   passport.authenticate('google', { scope: ['profile'] })
-// );
+const  s3 = new aws.S3();
 
-// app.get('/auth/google/secrets',
-//   passport.authenticate('google', { failureRedirect: '/login' }),
-//   function (req, res) {
-//     res.redirect('/secrets');
-//   }
-// );
-
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './assets/images/')
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now() + '.jpg')
-  }
-})
-
-var upload = multer({ storage: storage })
+const upload = multer({
+  storage: multerS3({
+      s3: s3,
+      acl: 'public-read',
+      bucket: 'scret-app-of-james-project',
+      key: function (req, file, cb) {
+          // console.log(file);
+          cb(null, file.fieldname + '-' + Date.now() + '.jpg');
+      }
+  })
+});
 
 app.get("/", function (req, res) {
   res.render("index")
@@ -142,7 +132,6 @@ app.get("/profile", function(req, res){
     res.render("signin")
   }
 })
-
 
 app.post("/signup", function (req, res) {
 
@@ -204,6 +193,7 @@ app.get("/submit", function (req, res) {
 app.post("/submit", function (req, res) {
   const submittedSecret = {
     singleSecret: req.body.secret,
+    // here we need to go to AWS S3 to get the picture back
     picture: req.body.filename
   }
   User.findById(req.user.id, function (err, foundUser) {
@@ -339,19 +329,17 @@ app.post("/addComment", function (req, res) {
   }
 })
 
-app.post('/upload', upload.single('photo'), (req, res) => {
-  if(req.file) {
-      res.render("submit", {filename: req.file.filename})
-  }
+app.post('/upload', upload.array('photo',1), function (req, res, next) {
+
+  // res.send("Uploaded!");
+  const s3filename = req.files[0].location;
+  console.log(req.files[0].location);
+
+  res.render("submit", {filename: s3filename});
 });
 
 let port = process.env.PORT;
 if (port == null || port == "") {
-  port = 8000;
+  port = 3000;
 }
 app.listen(port);
-
-// app.listen(3000, function () {
-//   console.log("Server started on port 3000.");
-// });
-
