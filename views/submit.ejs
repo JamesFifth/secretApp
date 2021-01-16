@@ -1,25 +1,38 @@
 <%- include('partials/user-header-log') %>
 
-<div class="container" id="block01">
-  <div class="jumbotron centered">
-    <h1 class="display-4">Create a secret</h1><br>
-    <p class="secret-help">Don't keep your secrets, share them anonymously!</p>
-    
-    <hr>
-    
-    <h2>Upload your picture here</h2>
-    <form action="/upload" method="post" enctype="multipart/form-data">
-      <p><input type="file" accept="image/*" name="photo"></p>
-      <p><input type="submit" value="upload"></p>
-    </form>
-    <hr>
-    <form action="/submit" method="POST">
-      <div class="form-group">
-      <input type="hidden" name="filename" value="<%= typeof filename != 'undefined' ? filename : 'https://scret-app-of-james-project.s3.amazonaws.com/photo-1610822201758.jpg'%>"></input>
-        <input type="text" class="form-control text-center" name="secret" placeholder="What's your secret?">
-      </div>
-      <button type="submit" class="btn btn-primary btn-block">Submit</button>
-    </form>
+  <div class="container" id="block01">
+    <div class="jumbotron centered">
+      <h1 class="display-4">Create a secret</h1><br>
+      <p class="secret-help">Don't keep your secrets, share them anonymously!</p>
+
+      <hr>
+
+      <% if (typeof filename !='undefined' ) { %>
+        <div style="text-align: center;">
+          <img src="<%=filename%>" alt="picture" />
+        </div>
+
+        <% } %>
+
+          <% if (typeof filename==='undefined' ) { %>
+
+            <h2 style="text-align: center;">Upload your picture here</h2>
+            <form action="/upload" method="post" enctype="multipart/form-data">
+              <p><input type="file" accept="image/*" name="photo"></p>
+              <p><input type="submit" value="upload"></p>
+            </form>
+
+            <% } %>
+
+              <hr>
+              <form action="/submit" method="POST">
+                <div class="form-group">
+                  <input type="hidden" name="filename"
+                    value="<%= typeof filename != 'undefined' ? filename : 'https://scret-app-of-james-project.s3.amazonaws.com/photo-1610822201758.jpg'%>"></input>
+                  <input type="text" class="form-control text-center" name="secret" placeholder="What's your secret?">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Submit</button>
+              </form>
+    </div>
   </div>
-</div>
-<%- include('partials/user-footer') %>
+  <%- include('partials/user-footer') %>

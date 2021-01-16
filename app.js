@@ -8,7 +8,7 @@ const passport = require('passport');
 const passportLocalMongoose = require('passport-local-mongoose');
 const findOrCreate = require('mongoose-findorcreate');
 
-// for upload photos to AWS S3
+// AWS S3
 const multer = require('multer');
 const aws = require('aws-sdk');
 const multerS3 = require('multer-s3');
@@ -333,7 +333,7 @@ app.post('/upload', upload.array('photo',1), function (req, res, next) {
 
   // res.send("Uploaded!");
   const s3filename = req.files[0].location;
-  console.log(req.files[0].location);
+  // console.log(req.files[0].location);
 
   res.render("submit", {filename: s3filename});
 });
