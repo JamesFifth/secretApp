@@ -100,6 +100,7 @@ const upload = multer({
   })
 });
 
+// get routes
 app.get("/", function (req, res) {
   res.render("index")
 })
@@ -133,6 +134,7 @@ app.get("/profile", function(req, res){
   }
 })
 
+// post routes
 app.post("/signup", function (req, res) {
 
   const account = req.body.account;
