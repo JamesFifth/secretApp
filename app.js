@@ -38,7 +38,7 @@ app.use(passport.initialize());
 
 app.use(passport.session());
 
-mongoose.connect("mongodb+srv://admin-mingwu:test07365273@cluster0.hqelv.mongodb.net/userDB", { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect("mongodb+srv://"+MONGO+"@cluster0.hqelv.mongodb.net/userDB", { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.set('useCreateIndex', true);
 
 const userSchema = new mongoose.Schema({
